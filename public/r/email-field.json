@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "email-field",
+  "type": "registry:block",
+  "title": "Email Field",
+  "description": "An email input component with validation",
+  "files": [
+    {
+      "path": "registry/email-field/component.tsx",
+      "content": "import React from \"react\";\nimport { Input } from \"@/components/ui/input\";\nimport { cn } from \"@/lib/utils\";\n\ninterface EmailInputProps extends React.InputHTMLAttributes<HTMLInputElement> {\n  error?: string;\n  className?: string;\n}\n\nexport const EmailInput = React.forwardRef<HTMLInputElement, EmailInputProps>(\n  ({ error, className, ...props }, ref) => {\n    return (\n      <Input\n        type=\"email\"\n        className={cn(className, error ? \"border-red-500\" : \"\")}\n        ref={ref}\n        {...props}\n      />\n    );\n  }\n);\n\nEmailInput.displayName = \"EmailInput\";\n",
+      "type": "registry:component",
+      "target": "src/registry-components/email-field/component.tsx"
+    },
+    {
+      "path": "registry/email-field/field.tsx",
+      "content": "import React from \"react\";\nimport {\n  FormField,\n  FormItem,\n  FormLabel,\n  FormControl,\n  FormMessage,\n} from \"@/components/ui/form\";\nimport { useFormContext } from \"react-hook-form\";\nimport { EmailInput } from \"./component\";\nimport { createEmailSchema } from \"./schema\";\n\ninterface EmailFieldProps {\n  name: string;\n  required?: boolean;\n  errorMessages?: {\n    required?: string;\n    invalid?: string;\n  };\n  label?: string;\n  placeholder?: string;\n  disabled?: boolean;\n  className?: string;\n}\n\nexport const EmailField: React.FC<EmailFieldProps> = ({\n  name,\n  label,\n  required = false,\n  errorMessages,\n  placeholder = \"Enter email address\",\n  disabled = false,\n  className = \"\",\n}) => {\n  const schema = createEmailSchema({\n    errorMessages,\n  });\n\n  const form = useFormContext();\n\n  return (\n    <FormField\n      control={form.control}\n      name={name}\n      rules={{\n        validate: (val) => {\n          const result = schema.safeParse({ email: val });\n          if (!result.success) {\n            return result.error.errors[0]?.message;\n          }\n          return true;\n        },\n      }}\n      render={({ field }) => (\n        <FormItem>\n          <FormLabel className=\"!text-foreground\">\n            {label} {required && <span className=\"text-red-500\">*</span>}\n          </FormLabel>\n          <FormControl>\n            <EmailInput\n              {...field}\n              placeholder={placeholder}\n              disabled={disabled}\n              className={className}\n            />\n          </FormControl>\n          <FormMessage />\n        </FormItem>\n      )}\n    />\n  );\n};\n",
+      "type": "registry:component",
+      "target": "src/registry-components/email-field/field.tsx"
+    },
+    {
+      "path": "registry/email-field/schema.ts",
+      "content": "import { z } from \"zod\";\n\nexport const createEmailSchema = ({\n  required = true,\n  errorMessages = {},\n}: {\n  required?: boolean;\n  errorMessages?: {\n    required?: string;\n    invalid?: string;\n    max?: string;\n  };\n} = {}) => {\n  const emailSchema = z\n    .string({\n      required_error: errorMessages.required ?? \"This field is required\",\n      invalid_type_error: errorMessages.invalid ?? \"Invalid email format\",\n    })\n    .email(errorMessages.invalid ?? \"Invalid email format\")\n    .max(255, errorMessages.max ?? \"Email must be less than 255 characters\")\n    .refine((val) => {\n      if (required && val === undefined)\n        return errorMessages.required ?? \"This field is required\";\n      return true;\n    });\n\n  return z.object({\n    email: emailSchema,\n  });\n};\n\nexport type EmailSchema = z.infer<ReturnType<typeof createEmailSchema>>;\n",
+      "type": "registry:hook",
+      "target": "src/registry-components/email-field/schema.ts"
+    }
+  ]
+}

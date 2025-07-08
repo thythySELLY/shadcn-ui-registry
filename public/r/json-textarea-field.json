@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "json-textarea-field",
+  "type": "registry:block",
+  "title": "JSON Textarea Field",
+  "description": "A textarea component for JSON input with validation",
+  "files": [
+    {
+      "path": "registry/json-textarea-field/component.tsx",
+      "content": "import React, { useCallback } from \"react\";\nimport { Textarea } from \"@/components/ui/textarea\";\nimport { cn } from \"@/lib/utils\";\n\ninterface JsonTextareaProps\n  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {\n  error?: string;\n  acceptedKeys?: string[];\n}\n\nexport const JsonTextarea = React.forwardRef<\n  HTMLTextAreaElement,\n  JsonTextareaProps\n>(({ className, error, acceptedKeys, onChange, ...props }, ref) => {\n  const formatJson = useCallback((value: string) => {\n    try {\n      const parsed = JSON.parse(value);\n      return JSON.stringify(parsed, null, 2);\n    } catch {\n      return value;\n    }\n  }, []);\n\n  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {\n    if (onChange) {\n      onChange(e);\n    }\n  };\n\n  const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {\n    const formatted = formatJson(e.target.value);\n    e.target.value = formatted;\n    if (onChange) {\n      const event = {\n        ...e,\n        target: { ...e.target, value: formatted },\n      } as React.ChangeEvent<HTMLTextAreaElement>;\n      onChange(event);\n    }\n  };\n\n  return (\n    <div className=\"space-y-2\">\n      {acceptedKeys && acceptedKeys.length > 0 && (\n        <div className=\"text-sm text-muted-foreground\">\n          Accepted keys: {acceptedKeys.join(\", \")}\n        </div>\n      )}\n      <Textarea\n        ref={ref}\n        className={cn(\"font-mono\", error && \"border-destructive\", className)}\n        onChange={handleChange}\n        onBlur={handleBlur}\n        {...props}\n      />\n      {error && <div className=\"text-sm text-destructive\">{error}</div>}\n    </div>\n  );\n});\n\nJsonTextarea.displayName = \"JsonTextarea\";\n",
+      "type": "registry:component",
+      "target": "src/registry-components/json-textarea-field/component.tsx"
+    },
+    {
+      "path": "registry/json-textarea-field/field.tsx",
+      "content": "import React from \"react\";\nimport { useFormContext } from \"react-hook-form\";\nimport { JsonTextarea } from \"./component\";\nimport {\n  FormField,\n  FormItem,\n  FormLabel,\n  FormMessage,\n} from \"@/components/ui/form\";\n\ninterface JsonTextareaFieldProps {\n  name: string;\n  label?: string;\n  placeholder?: string;\n  acceptedKeys?: string[];\n  className?: string;\n}\n\nexport const JsonTextareaField: React.FC<JsonTextareaFieldProps> = ({\n  name,\n  label,\n  placeholder,\n  acceptedKeys,\n  className,\n}) => {\n  const { control } = useFormContext();\n\n  return (\n    <FormField\n      control={control}\n      name={name}\n      render={({ field, fieldState: { error } }) => (\n        <FormItem className={className}>\n          {label && <FormLabel>{label}</FormLabel>}\n          <JsonTextarea\n            {...field}\n            placeholder={placeholder}\n            error={error?.message}\n            acceptedKeys={acceptedKeys}\n          />\n          <FormMessage />\n        </FormItem>\n      )}\n    />\n  );\n};\n",
+      "type": "registry:component",
+      "target": "src/registry-components/json-textarea-field/field.tsx"
+    },
+    {
+      "path": "registry/json-textarea-field/schema.ts",
+      "content": "import { z } from \"zod\";\n\nexport const createJsonTextareaSchema = (acceptedKeys?: string[]) => {\n  return z.object({\n    value: z\n      .string()\n      .min(1, \"JSON is required\")\n      .transform((str, ctx) => {\n        try {\n          const parsed = JSON.parse(str);\n          if (typeof parsed !== \"object\" || parsed === null) {\n            ctx.addIssue({\n              code: z.ZodIssueCode.custom,\n              message: \"Invalid JSON object\",\n            });\n            return z.NEVER;\n          }\n\n          if (acceptedKeys && acceptedKeys.length > 0) {\n            const invalidKeys = Object.keys(parsed).filter(\n              (key) => !acceptedKeys.includes(key)\n            );\n            if (invalidKeys.length > 0) {\n              ctx.addIssue({\n                code: z.ZodIssueCode.custom,\n                message: `Invalid keys found: ${invalidKeys.join(\n                  \", \"\n                )}. Accepted keys are: ${acceptedKeys.join(\", \")}`,\n              });\n              return z.NEVER;\n            }\n          }\n\n          return parsed;\n        } catch {\n          ctx.addIssue({\n            code: z.ZodIssueCode.custom,\n            message: \"Invalid JSON syntax\",\n          });\n          return z.NEVER;\n        }\n      }),\n  });\n};\n\nexport type JsonTextareaSchema = z.infer<\n  ReturnType<typeof createJsonTextareaSchema>\n>;\n",
+      "type": "registry:hook",
+      "target": "src/registry-components/json-textarea-field/schema.ts"
+    }
+  ]
+}

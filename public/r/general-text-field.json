@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "general-text-field",
+  "type": "registry:block",
+  "title": "Text Field",
+  "description": "A general text input component with validation",
+  "files": [
+    {
+      "path": "registry/general-text-field/component.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Input } from \"@/components/ui/input\";\nimport { cn } from \"@/lib/utils\";\nimport { Loader2 } from \"lucide-react\";\n\nexport interface GeneralTextInputProps\n  extends React.InputHTMLAttributes<HTMLInputElement> {\n  error?: boolean;\n  isLoading?: boolean;\n}\n\nexport const GeneralTextInput = React.forwardRef<\n  HTMLInputElement,\n  GeneralTextInputProps\n>(({ className, error, type = \"text\", isLoading, ...props }, ref) => {\n  return (\n    <div className=\"relative\">\n      <Input\n        type={type}\n        className={cn(\n          \"w-full text-foreground\",\n          error && \"border-destructive\",\n          className\n        )}\n        ref={ref}\n        {...props}\n      />\n      {isLoading && (\n        <Loader2 className=\"w-4 h-4 animate-spin absolute right-2 top-1/2 -translate-y-1/2\" />\n      )}\n    </div>\n  );\n});\n\nGeneralTextInput.displayName = \"GeneralTextInput\";\n",
+      "type": "registry:component",
+      "target": "src/registry-components/general-text-field/component.tsx"
+    },
+    {
+      "path": "registry/general-text-field/field.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { type Path, type FieldValues, useFormContext } from \"react-hook-form\";\nimport {\n  FormField,\n  FormItem,\n  FormControl,\n  FormMessage,\n  FormLabel,\n} from \"@/components/ui/form\";\nimport { GeneralTextInput } from \"./component\";\nimport { createTextInputSchema } from \"./schema\";\n\nexport interface GeneralTextFieldProps<T extends FieldValues>\n  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, \"form\" | \"size\"> {\n  name: Path<T>;\n  label: string;\n  required?: boolean;\n  minLength?: number;\n  maxLength?: number;\n  pattern?: string;\n  errorMessages?: {\n    required?: string;\n    minLength?: string;\n    maxLength?: string;\n    pattern?: string;\n  };\n  isLoading?: boolean;\n}\n\nexport function GeneralTextField<T extends FieldValues>({\n  label,\n  name,\n  required,\n  minLength,\n  maxLength,\n  pattern,\n  className,\n  errorMessages,\n  isLoading,\n  ...props\n}: GeneralTextFieldProps<T>) {\n  const form = useFormContext<T>();\n\n  const schema = createTextInputSchema({\n    required,\n    errorMessages,\n    minLength,\n    maxLength,\n    pattern,\n  });\n\n  return (\n    <FormField\n      control={form.control}\n      name={name}\n      rules={{\n        validate: (val) => {\n          const result = schema.safeParse(val);\n          return result.success || result.error.errors[0]?.message;\n        },\n      }}\n      render={({ field, fieldState }) => (\n        <FormItem className={className}>\n          <FormLabel className=\"!text-foreground\">\n            {label} {required && <span className=\"text-red-500\">*</span>}\n          </FormLabel>\n          <FormControl>\n            <GeneralTextInput\n              error={!!fieldState.error}\n              {...field}\n              {...props}\n              disabled={isLoading}\n              isLoading={isLoading}\n            />\n          </FormControl>\n          <FormMessage />\n        </FormItem>\n      )}\n    />\n  );\n}\n",
+      "type": "registry:component",
+      "target": "src/registry-components/general-text-field/field.tsx"
+    },
+    {
+      "path": "registry/general-text-field/schema.ts",
+      "content": "import * as z from \"zod\";\n\nexport const createTextInputSchema = ({\n  required = false,\n  minLength,\n  maxLength,\n  pattern,\n  errorMessages,\n}: {\n  required?: boolean;\n  minLength?: number;\n  maxLength?: number;\n  pattern?: string;\n  errorMessages?: {\n    required?: string;\n    minLength?: string;\n    maxLength?: string;\n    pattern?: string;\n  };\n} = {}) => {\n  return z.string().superRefine((val, ctx) => {\n    if (required && !val) {\n      ctx.addIssue({\n        code: z.ZodIssueCode.custom,\n        message: errorMessages?.required ?? \"This field is required\",\n      });\n      return;\n    }\n\n    if (val) {\n      if (typeof minLength === \"number\" && val.length < minLength) {\n        ctx.addIssue({\n          code: z.ZodIssueCode.custom,\n          message:\n            errorMessages?.minLength ?? `Minimum ${minLength} characters`,\n        });\n      }\n\n      if (typeof maxLength === \"number\" && val.length > maxLength) {\n        ctx.addIssue({\n          code: z.ZodIssueCode.custom,\n          message:\n            errorMessages?.maxLength ?? `Maximum ${maxLength} characters`,\n        });\n      }\n\n      if (pattern && !new RegExp(pattern).test(val)) {\n        ctx.addIssue({\n          code: z.ZodIssueCode.custom,\n          message: errorMessages?.pattern ?? \"Invalid format\",\n        });\n      }\n    }\n  });\n};\n",
+      "type": "registry:hook",
+      "target": "src/registry-components/general-text-field/schema.ts"
+    }
+  ]
+}

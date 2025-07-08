@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "general-textarea-field",
+  "type": "registry:block",
+  "title": "Textarea Field",
+  "description": "A general textarea component with validation",
+  "files": [
+    {
+      "path": "registry/general-textarea-field/component.tsx",
+      "content": "import * as React from \"react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface TextareaProps\n  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {\n  error?: boolean;\n  disabled?: boolean;\n}\n\nconst GenerateTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(\n  ({ className, error, disabled, ...props }, ref) => {\n    return (\n      <textarea\n        className={cn(\n          \"flex min-h-[80px] w-full text-foreground rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50\",\n          error && \"border-destructive\",\n          disabled && \"cursor-not-allowed opacity-50 text-muted-foreground\",\n          className\n        )}\n        ref={ref}\n        disabled={disabled}\n        {...props}\n      />\n    );\n  }\n);\nGenerateTextarea.displayName = \"GenerateTextarea\";\n\nexport { GenerateTextarea };\n",
+      "type": "registry:component",
+      "target": "src/registry-components/general-textarea-field/component.tsx"
+    },
+    {
+      "path": "registry/general-textarea-field/field.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { type Path, type FieldValues, useFormContext } from \"react-hook-form\";\nimport {\n  FormField,\n  FormItem,\n  FormControl,\n  FormMessage,\n  FormLabel,\n} from \"@/components/ui/form\";\nimport { GenerateTextarea } from \"./component\";\nimport { createGeneralTextareaSchema } from \"./schema\";\n\nexport interface GeneralTextareaFieldProps<T extends FieldValues>\n  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, \"form\"> {\n  name: Path<T>;\n  label?: string;\n  required?: boolean;\n  minLength?: number;\n  maxLength?: number;\n}\n\nexport function GeneralTextareaField<T extends FieldValues>({\n  name,\n  label,\n  placeholder,\n  className,\n  required = false,\n  disabled = false,\n  minLength = 1,\n  maxLength = 1000,\n  ...props\n}: GeneralTextareaFieldProps<T>) {\n  const form = useFormContext();\n\n  const schema = createGeneralTextareaSchema(minLength, maxLength, required);\n  return (\n    <FormField\n      control={form.control}\n      name={name}\n      rules={{\n        validate: (val) => {\n          const result = schema.safeParse(val);\n          return result.success || result.error.errors[0]?.message;\n        },\n      }}\n      render={({ field, fieldState }) => (\n        <FormItem className={className}>\n          {label && (\n            <FormLabel className=\"!text-foreground\">\n              {label} {required && <span className=\"text-destructive\">*</span>}\n            </FormLabel>\n          )}\n          <FormControl>\n            <GenerateTextarea\n              {...field}\n              {...props}\n              placeholder={placeholder}\n              disabled={disabled}\n              error={!!fieldState.error}\n            />\n          </FormControl>\n          <FormMessage />\n        </FormItem>\n      )}\n    />\n  );\n}\n",
+      "type": "registry:component",
+      "target": "src/registry-components/general-textarea-field/field.tsx"
+    },
+    {
+      "path": "registry/general-textarea-field/schema.ts",
+      "content": "import { z } from \"zod\";\n\nexport const createGeneralTextareaSchema = (\n  minLength: number,\n  maxLength: number,\n  required: boolean\n) => {\n  const baseSchema = z\n    .string()\n    .min(minLength, `Minimum ${minLength} characters allowed`)\n    .max(maxLength, `Maximum ${maxLength} characters allowed`);\n\n  return z.object({\n    value: required ? baseSchema : baseSchema.optional(),\n  });\n};\n\nexport type GeneralTextareaSchema = z.infer<\n  ReturnType<typeof createGeneralTextareaSchema>\n>;\n",
+      "type": "registry:hook",
+      "target": "src/registry-components/general-textarea-field/schema.ts"
+    }
+  ]
+}

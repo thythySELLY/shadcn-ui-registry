@@ -1,0 +1,281 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "selly-registry",
+  "homepage": "http://localhost:3000",
+  "items": [
+    {
+      "name": "currency-field",
+      "type": "registry:block",
+      "title": "Currency Field",
+      "description": "A currency input component with validation and formatting",
+      "files": [
+        {
+          "path": "registry/currency-field/component.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/currency-field/component.tsx"
+        },
+        {
+          "path": "registry/currency-field/field.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/currency-field/field.tsx"
+        },
+        {
+          "path": "registry/currency-field/schema.ts",
+          "type": "registry:hook",
+          "target": "src/registry-components/currency-field/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "email-field",
+      "type": "registry:block",
+      "title": "Email Field",
+      "description": "An email input component with validation",
+      "files": [
+        {
+          "path": "registry/email-field/component.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/email-field/component.tsx"
+        },
+        {
+          "path": "registry/email-field/field.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/email-field/field.tsx"
+        },
+        {
+          "path": "registry/email-field/schema.ts",
+          "type": "registry:hook",
+          "target": "src/registry-components/email-field/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "general-number-field",
+      "type": "registry:block",
+      "title": "Number Field",
+      "description": "A general number input component with validation",
+      "files": [
+        {
+          "path": "registry/general-number-field/component.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/general-number-field/component.tsx"
+        },
+        {
+          "path": "registry/general-number-field/field.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/general-number-field/field.tsx"
+        },
+        {
+          "path": "registry/general-number-field/schema.ts",
+          "type": "registry:hook",
+          "target": "src/registry-components/general-number-field/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "general-text-field",
+      "type": "registry:block",
+      "title": "Text Field",
+      "description": "A general text input component with validation",
+      "files": [
+        {
+          "path": "registry/general-text-field/component.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/general-text-field/component.tsx"
+        },
+        {
+          "path": "registry/general-text-field/field.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/general-text-field/field.tsx"
+        },
+        {
+          "path": "registry/general-text-field/schema.ts",
+          "type": "registry:hook",
+          "target": "src/registry-components/general-text-field/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "general-textarea-field",
+      "type": "registry:block",
+      "title": "Textarea Field",
+      "description": "A general textarea component with validation",
+      "files": [
+        {
+          "path": "registry/general-textarea-field/component.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/general-textarea-field/component.tsx"
+        },
+        {
+          "path": "registry/general-textarea-field/field.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/general-textarea-field/field.tsx"
+        },
+        {
+          "path": "registry/general-textarea-field/schema.ts",
+          "type": "registry:hook",
+          "target": "src/registry-components/general-textarea-field/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "json-textarea-field",
+      "type": "registry:block",
+      "title": "JSON Textarea Field",
+      "description": "A textarea component for JSON input with validation",
+      "files": [
+        {
+          "path": "registry/json-textarea-field/component.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/json-textarea-field/component.tsx"
+        },
+        {
+          "path": "registry/json-textarea-field/field.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/json-textarea-field/field.tsx"
+        },
+        {
+          "path": "registry/json-textarea-field/schema.ts",
+          "type": "registry:hook",
+          "target": "src/registry-components/json-textarea-field/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "multi-select-field",
+      "type": "registry:block",
+      "title": "Multi Select Field",
+      "description": "A multiple selection component with validation",
+      "files": [
+        {
+          "path": "registry/multi-select-field/component.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/multi-select-field/component.tsx"
+        },
+        {
+          "path": "registry/multi-select-field/field.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/multi-select-field/field.tsx"
+        },
+        {
+          "path": "registry/multi-select-field/schema.ts",
+          "type": "registry:hook",
+          "target": "src/registry-components/multi-select-field/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "multi-textarea-field",
+      "type": "registry:block",
+      "title": "Multi Textarea Field",
+      "description": "A multiple textarea component with validation",
+      "files": [
+        {
+          "path": "registry/multi-textarea-field/component.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/multi-textarea-field/component.tsx"
+        },
+        {
+          "path": "registry/multi-textarea-field/field.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/multi-textarea-field/field.tsx"
+        },
+        {
+          "path": "registry/multi-textarea-field/schema.ts",
+          "type": "registry:hook",
+          "target": "src/registry-components/multi-textarea-field/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "phone-number-field",
+      "type": "registry:block",
+      "title": "Phone Number Field",
+      "description": "A phone number input component with validation and formatting",
+      "files": [
+        {
+          "path": "registry/phone-number-field/component.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/phone-number-field/component.tsx"
+        },
+        {
+          "path": "registry/phone-number-field/field.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/phone-number-field/field.tsx"
+        },
+        {
+          "path": "registry/phone-number-field/schema.ts",
+          "type": "registry:hook",
+          "target": "src/registry-components/phone-number-field/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "single-select-field",
+      "type": "registry:block",
+      "title": "Single Select Field",
+      "description": "A single selection component with validation",
+      "files": [
+        {
+          "path": "registry/single-select-field/component.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/single-select-field/component.tsx"
+        },
+        {
+          "path": "registry/single-select-field/field.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/single-select-field/field.tsx"
+        },
+        {
+          "path": "registry/single-select-field/schema.ts",
+          "type": "registry:hook",
+          "target": "src/registry-components/single-select-field/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "url-field",
+      "type": "registry:block",
+      "title": "URL Field",
+      "description": "A URL input component with validation",
+      "files": [
+        {
+          "path": "registry/url-field/component.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/url-field/component.tsx"
+        },
+        {
+          "path": "registry/url-field/field.tsx",
+          "type": "registry:component",
+          "target": "src/registry-components/url-field/field.tsx"
+        },
+        {
+          "path": "registry/url-field/schema.ts",
+          "type": "registry:hook",
+          "target": "src/registry-components/url-field/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "input-base",
+      "type": "registry:ui",
+      "title": "Input Base",
+      "description": "Base input component used by other field components",
+      "files": [
+        {
+          "path": "registry/input-base.tsx",
+          "type": "registry:ui",
+          "target": "src/registry-components/input-base.tsx"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    "@radix-ui/react-accordion",
+    "zod",
+    "lucide-react",
+    "react-hook-form",
+    "@hookform/resolvers"
+  ],
+  "categories": ["registry-components"]
+}
